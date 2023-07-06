@@ -18,6 +18,7 @@ type PayeeFormProps = {
   spendingID: string,
   spendingTotal: number 
   content?: string,
+  date?: Date,
 }
 
 type AddPayeeProps = { 
@@ -25,9 +26,10 @@ type AddPayeeProps = {
   spendingTotal: number 
   content?: string,
   totalAssigned: number,
+  date?: Date,
 }
 
-function NewForm({spendingID, spendingTotal, content, totalAssigned}: AddPayeeProps) {
+function NewForm({spendingID, spendingTotal, content, totalAssigned, date}: AddPayeeProps) {
   const session = useSession()
   const userId = session.data?.user.id as string
   const userName = session.data?.user.name as string
@@ -47,7 +49,8 @@ function NewForm({spendingID, spendingTotal, content, totalAssigned}: AddPayeePr
     userId: string,
     payeeId: string, 
     spendingId: string,
-    note: string
+    note: string,
+    date: string
   }
 
   const initialValues: MyFormValues = {
@@ -55,7 +58,8 @@ function NewForm({spendingID, spendingTotal, content, totalAssigned}: AddPayeePr
     userId: userId,
     payeeId: '',
     spendingId: spendingID, 
-    note: content == undefined || null ? "" : content
+    note: content == undefined || null ? "" : content,
+    date: date == undefined ? "" : date.toString()
   };
 
   const validateForm = (values: MyFormValues) => {
@@ -87,7 +91,8 @@ function NewForm({spendingID, spendingTotal, content, totalAssigned}: AddPayeePr
               payeeId: values.payeeId,
               amount: values.amount,
               spendingID: values.spendingId,
-              note: values.note
+              note: values.note,  
+              date: values.date
             })            
             actions.setSubmitting(false)
             actions.resetForm()
@@ -148,7 +153,7 @@ function NewForm({spendingID, spendingTotal, content, totalAssigned}: AddPayeePr
 }
 
 
-export default function PayeeForm({spendingID, content, spendingTotal}: PayeeFormProps) {
+export default function PayeeForm({spendingID, content, spendingTotal, date}: PayeeFormProps) {
   const [close, setClose] = useState(false)
   const session = useSession()
   const userId = session.data?.user.id as string
@@ -208,7 +213,7 @@ export default function PayeeForm({spendingID, content, spendingTotal}: PayeeFor
                 </div>
             }
         </div> 
-          {close ? <NewForm spendingID={spendingID} spendingTotal={spendingTotal} content={content} totalAssigned={totalAssigned}/> : <></>}
+          {close ? <NewForm spendingID={spendingID} spendingTotal={spendingTotal} content={content} totalAssigned={totalAssigned} date={date}/> : <></>}
           <div className="flex justify-center space-x-2 pt-1">
             {
               close ? 

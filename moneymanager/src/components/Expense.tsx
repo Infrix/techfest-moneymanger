@@ -29,10 +29,12 @@ export default function Expense({spendings, userId}: SpendingProps) {
   const transExp = dataMonthly?.filter(post => post.category == 'Transporation').reduce((sum: number, post) => sum + post.money, 0) ?? 0 
   const finExp = dataMonthly?.filter(post => post.category == 'Financial Expenses').reduce((sum: number, post) => sum + post.money, 0) ?? 0
   
-  const collect = payments.data?.collect.filter(post => post.validated).reduce((sum: number, post) => sum + post.amount, 0) ?? 0
-  const paid = payments.data?.owe.filter(post => post.resolved).reduce((sum: number, post) => sum + post.amount, 0) ?? 0
 
-  const total = totalMonthly + collect - paid
+  // find out how to query payments by same month instead of filter after querying all 
+  const collect = payments.data?.collect.filter(post => post.validated && post.date.getFullYear() == currYear && post.date.getMonth() == currMonth).reduce((sum: number, post) => sum + post.amount, 0) ?? 0
+  const paid = payments.data?.owe.filter(post => post.validated && post.date.getFullYear() == currYear && post.date.getMonth() == currMonth).reduce((sum: number, post) => sum + post.amount, 0) ?? 0
+
+  const total = totalMonthly - collect + paid
 
   const data = {
     labels: ['Food & Drinks', 'Shopping', 'Transporation', 'Financial Expenses'],

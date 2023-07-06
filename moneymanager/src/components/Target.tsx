@@ -56,14 +56,14 @@ export default function Target({src, name, spendings, userId}: TargetProps) {
               {
                 data?.owe.filter(post => !post.resolved)
                 .map((post, ind) => 
-                    <ul key={ind} className="lg:grid lg:grid-cols-4">
+                    <ul key={ind} className="lg:grid lg:grid-cols-5">
                     <div className="flex flex-cols space-x-2 pr-2">
                       <p>{ind + 1}.</p>
-                      <Payee userId={post.userId}/>
-                      <div>${post.amount}</div>
-                      
+                      <Payee userId={post.userId}/>                      
                     </div>
-                    <div className="col-span-2 pr-2">{post.note}</div>
+                    <div>${post.amount}</div>
+                    <div>{post.date.getDate()}/{post.date.getMonth()+1}</div>
+                    <div className="pr-2">{post.note}</div>
                     <div className="lg:flex lg:justify-center">
                       <button className="hover:text-red-400" onClick={() => handleResolve(post.id)}>Resolve</button>
                     </div>
@@ -75,20 +75,18 @@ export default function Target({src, name, spendings, userId}: TargetProps) {
             <h2 className="font-bold">Payment to collect</h2>
             <div className="rounded-md bg-slate-500 space-y-1">
               {
-                data?.collect.filter(post => !post.validated).map((post, ind) => 
-                  <ul key={ind} className="lg:grid lg:grid-cols-4">
-                    <div className="flex flex-cols space-x-2 pr-1">
+                data?.collect.filter(post => !post.resolved)
+                .map((post, ind) => 
+                    <ul key={ind} className="lg:grid lg:grid-cols-5">
+                    <div className="flex flex-cols space-x-2 pr-2">
                       <p>{ind + 1}.</p>
-                      <Payee userId={post.userId}/>
-                      <div>${post.amount}</div>
-                      
+                      <Payee userId={post.userId}/>                      
                     </div>
-                    <div className="col-span-2 pr-2">{post.note}</div>
+                    <div>${post.amount}</div>
+                    <div>{post.date.getDate()}/{post.date.getMonth()+1}</div>
+                    <div className="pr-2">{post.note}</div>
                     <div className="lg:flex lg:justify-center">
-                      {
-                        post.resolved ? <button className="hover:text-red-400" onClick={() => handleValidate(post.id)}>Validate</button>
-                                      : <p>Pending...</p>
-                      }
+                      <button className="hover:text-red-400" onClick={() => handleResolve(post.id)}>Resolve</button>
                     </div>
                   </ul>
                 )

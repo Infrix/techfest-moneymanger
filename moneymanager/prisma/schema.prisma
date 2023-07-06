@@ -19,6 +19,7 @@ model Payment {
     payeeId String 
     spendingId String
     note String? 
+    createdAt DateTime
 
     spending Spending @relation(fields:[spendingId], references: [id], onDelete: Cascade)
     user User @relation(fields:[userId], references: [id], onDelete: Cascade)

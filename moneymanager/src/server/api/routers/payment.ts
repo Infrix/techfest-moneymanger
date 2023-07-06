@@ -30,7 +30,8 @@ export const paymentRouter = createTRPCRouter({
         userId: post.userId, 
         payeeId: post.payeeId,
         note: post.note,
-        validated: post.validated
+        validated: post.validated,
+        date: post.createdAt
       })),
 
       collect: data1.map(post => ({
@@ -40,7 +41,8 @@ export const paymentRouter = createTRPCRouter({
         userId: post.userId, 
         payeeId: post.payeeId,
         note: post.note,
-        validated: post.validated
+        validated: post.validated,
+        date: post.createdAt
       }))
     }
 
@@ -68,8 +70,9 @@ export const paymentRouter = createTRPCRouter({
     userId: z.string(), 
     payeeId: z.string(), 
     spendingID: z.string(),
-    note: z.string()
-  })).mutation(async ({input: {amount, spendingID, userId, payeeId, note}, ctx}) => {
+    note: z.string(),
+    date: z.string().transform(str => new Date(str)),
+  })).mutation(async ({input: {amount, spendingID, userId, payeeId, note, date}, ctx}) => {
     
     return await ctx.prisma.payment.create({
       data: {
@@ -77,7 +80,8 @@ export const paymentRouter = createTRPCRouter({
         payeeId: payeeId,
         amount: amount,
         spendingId: spendingID,
-        note: note
+        note: note,
+        createdAt: date
       }
     })
   }),
