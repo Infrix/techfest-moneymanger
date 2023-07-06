@@ -6,6 +6,7 @@ import Payee from "./Payee";
 
 export default function Target({src, name, spendings, userId}: TargetProps) {
   const { isLoading, data } = api.payment.getPayments.useQuery(userId)
+  const { targetData } = api.user.getTarget.useQuery(userId)
   const utils = api.useContext()
   const resolvePayment = api.payment.resolve.useMutation({
     onSuccess: (editSpending) => { 
@@ -40,10 +41,13 @@ export default function Target({src, name, spendings, userId}: TargetProps) {
         <div className="flex flex-row justify-between border-b-2 border-slate-600 py-2"> 
           <div className="flex flex-row space-x-2">
             <p className="text-xl font-bold">Target this month:</p>
-            <p className="text-medium text-4xl">$100</p>  
+            <p>{targetData ? "$" + targetData : "No Target Set"}</p>
           </div>
           <div className="flex justify-end">
-            <button className="text-white px-2 bg-gray-900 rounded hover:bg-slate-600">Set Target</button>
+            {/* <button className="text-white px-2 bg-gray-900 rounded hover:bg-slate-600">Set Target</button> */}
+            <Link href='/setTarget' className="text-white px-2 bg-gray-900 rounded hover:bg-slate-600 pt-2"> 
+            Set Target
+          </Link> 
           </div>
         </div>
         

@@ -46,6 +46,19 @@ export const usersRouter = createTRPCRouter({
     
   }),
 
+  getTarget: protectedProcedure.input(z.string()).query(async ({input, ctx}) => {
+    const data = await ctx.prisma.user.findUnique({
+      where: {
+        id:input
+      }
+    })
+
+    return {
+      id: data?.id,
+      target: data?.target
+    }
+  }),
+
   getFollowers: protectedProcedure.input(z.string()).query(async ({ input, ctx }) => {
     const data = await ctx.prisma.follows.findMany({
       where: {
@@ -119,6 +132,26 @@ export const usersRouter = createTRPCRouter({
       },
     })
   }), 
+
+  editTarget: protectedProcedure.input( z.object({ 
+    userid: z.string(),
+    goals: z.number().optional(), 
+    date: z.string().optional()})).mutation(
+    async({ input: { userid, goals, date }, ctx }) => {
+      
+      const createdAt = date !== undefined ? new Date(date) : undefined
+
+      return await ctx.prisma.user.update({
+        where: {
+          id: userid
+        },
+        data: {
+          goals: goals,
+          createdAt: createdAt
+        }
+      })
+    }  
+  )
 
 
 
